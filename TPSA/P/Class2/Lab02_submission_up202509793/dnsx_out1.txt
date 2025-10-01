@@ -1,0 +1,10 @@
+bounce.accounts.chime.com
+kyc.chime.com
+www.workdayxchime.com
+compass.chime.com
+tags.chime.com
+nautilus.chime.com
+bounce.updates.chime.com
+wireless.chime.com
+access.chime.com
+dds.chime.com

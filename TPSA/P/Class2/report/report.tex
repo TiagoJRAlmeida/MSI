@@ -1,0 +1,344 @@
+% LaTeX template for subdomain & URL enumeration report
+% Save as Subdomain_Enumeration_Report.tex and compile with: pdflatex Subdomain_Enumeration_Report.tex
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\title{Reconnaissance Techniques and Subdomain Enumeration}
+\author{Tiago Almeida}
+\date{\today}
+
+\lstset{%
+basicstyle=\ttfamily\small,
+breaklines=true,
+frame=single,
+numbers=left,
+numberstyle=\tiny,
+xleftmargin=2em
+}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+This report presents the resolution of the exercises from the second class of the \textit{Theory and Practice of Security Attacks} course. 
+The assignment consisted of applying reconnaissance techniques and tools to the domain \textbf{chime.com}. 
+The following sections document the methodology, commands, results, and findings from passive and active subdomain enumeration, HTTP service discovery, 
+URL scanning, and Google dorking performed against the target domain.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+
+%% SECTION -- PASSIVE SUBDOMAIN ENUMERATION
+\section{Passive subdomain enumeration}
+\subsection{Tools used}
+For this exercise I used both recommended tools: \textbf{subfinder} and \textbf{assetfinder}. The reasons for using both were:
+\begin{itemize}
+\item to learn how to run and interpret the outputs of both tools;
+\item to build a more complete initial subdomain list (\texttt{subs.txt});
+\item to be able to compare each tool's contributions and identify which one found the most useful domains (discussed later in the Conclusion).
+\end{itemize}
+
+\subsection{Methodology}
+I ran each tool independently, applied lightweight filtering to reduce obvious noise, collected the raw outputs for reproducibility, and then 
+merged and deduplicated the results. I also ran a small statistics script to compare the per-tool results before merging so I could quantify 
+overlap and unique findings.
+
+\subsection{Commands}
+\begin{lstlisting}
+
+# Run subfinder
+
+subfinder -d chime.com -silent | sort -u | grep -v '*' > subfinder_out.txt
+
+# Run assetfinder
+
+assetfinder --subs-only chime.com | sort -u | grep -v '*' > assetfinder_out.txt
+
+# Run a small stats script to compare outputs
+
+python3 stats.py assetfinder_out.txt subfinder_out.txt
+
+# Merge and deduplicate into passive_subs.txt
+
+cat subfinder_out.txt assetfinder_out.txt | sort -u > passive_subs.txt
+\end{lstlisting}
+
+\newpage 
+
+\subsection{Results}
+The statistics script produced the following output:
+\begin{lstlisting}
+====================================
+|              STATS               |
+====================================
+
+- Number of subdomains found
+     assetfinder_out.txt :  85
+     subfinder_out.txt :  269
+
+- Number of subdomains found
+     By both tools :  77
+     By just assetfinder_out.txt :  8
+     By just subfinder_out.txt :  192
+
+- Number of INVALID subdomains found (no <chime.com> suffix)
+     By both tools :  0
+     By just assetfinder_out.txt :  0
+     By just subfinder_out.txt :  0
+
+====================================
+
+\end{lstlisting}
+
+Key observations from the results:
+\begin{itemize}
+\item \textbf{subfinder} returned substantially more candidate subdomains than \textbf{assetfinder}. Many of \textbf{assetfinder}'s results were also present in \textbf{subfinder}.
+\item There were no obviously invalid entries (for example, external domains incorrectly listed as \texttt{chime.com} subdomains).
+\item The overlap (77 entries) indicates a solid common core; the larger number of unique results from \textbf{subfinder} warrants manual inspection for quality (quantity does not imply usefulness).
+\end{itemize}
+
+\textbf{Note: }During an earlier run, \textbf{assetfinder} returned an unexpected entry (\texttt{google.com}), which motivated the validation step.
+
+%% SECTION -- ACTIVE SUBDOMAIN ENUMERATION
+\section{Active subdomain enumeration}
+\subsection{Tools and wordlists}
+For the active enumeration I used a single tool: \textbf{dnsx}. The reason for choosing one tool was pragmatic: most active enumeration tools 
+perform similar DNS probing (the main differences are performance and feature set), so I selected dnsx for its simplicity and resolver options. 
+In active enumeration, the choice of wordlist typically has a greater impact on results than the specific tool; 
+for wordlists I used entries from SecLists.
+
+I document below the wordlists used, rationale, and performance considerations:
+\begin{itemize}
+\item SecLists/Discovery/DNS/subdomains-top1million-110000.txt — large, broad list used against the base domain to maximise discovery.
+\item SecLists/Discovery/DNS/subdomains-top1million-5000.txt — smaller list used when enumerating under each discovered subdomain to limit total 
+query volume.
+\item Performance notes: applying large wordlists across many parent hosts produces a combinatorial explosion of DNS queries; 
+\end{itemize}
+
+\subsection{Commands}
+\begin{lstlisting}
+
+# Active enumeration against the base domain
+
+dnsx -d chime.com -silent -w /SecLists/Discovery/DNS/subdomains-top1million-110000.txt > dnsx_out.txt
+
+# Active enumeration against each discovered subdomain (brute-forcing children) (high query volume)
+
+dnsx -d passive_subs.txt -silent -w SecLists/Discovery/DNS/subdomains-top1million-5000.txt > dnsx_out1.txt
+
+# Merge and deduplicate into passive_subs.txt
+
+cat dnsx_out.txt dnsx_out1.txt | sort -u > active_subs.txt
+\end{lstlisting}
+
+Notes on the commands above:
+\begin{itemize}
+\item The \texttt{-silent} flag reduces noisy output and the results were appended to output files for later analysis.
+\item Running the 110k-wordlist against the base domain produced many DNS requests (on the order of 110,000 queries) and took a noticeable amount of time; 
+running the 5k-wordlist across the 277 subdomains found earlier resulted in roughly 1.385 million queries and took several hours.
+\item When doing large active scans, it seems better to: use a fast, reliable resolver pool (resolvers.txt), implement rate limiting, and document 
+your scan window and permissions.
+\end{itemize}
+
+\subsection{Results and analysis}
+I compared the dnsx outputs with the passive results using the same \texttt{stats.py} script used previously.
+
+Example command invocations:
+\begin{lstlisting}
+python3 stats.py dnsx_out.txt subs.txt
+python3 stats.py dnsx_out1.txt subs.txt
+python3 stats.py dnsx_out.txt dnsx_out1.txt
+\end{lstlisting}
+
+Summary of findings (condensed):
+\begin{itemize}
+\item \texttt{dnsx\_out.txt} (base-domain run) returned 32 subdomains, of which 13 were new (not present in \texttt{subs.txt}).
+\item \texttt{dnsx\_out1.txt} (children-of-subdomains run) returned 26 subdomains, of which 10 were new.
+\item Intersection between the two dnsx runs:
+\begin{description}
+    \item[Found by both runs:] \texttt{nautilus.chime.com}, \texttt{dds.chime.com}, \texttt{kyc.chime.com}, \texttt{wireless.chime.com}, \texttt{tags.chime.com}
+    \item[Only in the base-domain run:] \texttt{persona.chime.com}, \texttt{cde.chime.com}, \texttt{mcd.chime.com}, \texttt{notifications.chime.com}, \texttt{beacon.chime.com}, \texttt{lending.chime.com}, \texttt{atomic.chime.com}, \texttt{payday.chime.com}
+    \item[Only in the children-of-subdomains run:] \texttt{www.workdayxchime.com}, \texttt{compass.chime.com}, \texttt{access.chime.com}, \texttt{bounce.updates.chime.com}, \texttt{bounce.accounts.chime.com}
+\end{description}
+\end{itemize}
+
+Observations:
+\begin{itemize}
+\item The base-domain brute force found slightly more unique subdomains overall, but probing subdomains-for-children also yielded unique entries that the 
+base run missed. Each approach can be complementary.
+\item The additional unique hosts discovered by the children-of-subdomains run included some suspicious-looking names 
+(for example, \texttt{www.workdayxchime.com}), which may be misconfigurations, CNAMEs, or external services. 
+These should be validated (resolve, check TLS certificate CN/SANs, and inspect HTTP responses) before concluding they are in-scope assets.
+\item Given the high query count and limited additional value gained from the children-of-subdomains pass in this case, 
+I concluded that it is better deprioritising exhaustive children enumeration unless the base-domain results have been exhausted and more 
+depth is clearly needed.
+\end{itemize}
+
+
+%% SECTION -- HTTP(S) DISCOVERY
+\section{HTTP(S) service discovery}
+\subsection{Tools}
+For this exercise I only used httpx. Before using it however I searched for out of scope domains on bugcrowd (https://bugcrowd.com/engagements/chime),
+copied them into a file called \texttt{out\_of\_scope.txt}, and made sure I didn't target them.
+
+\subsection{Commands (examples)}
+\begin{lstlisting}
+
+# Merge and deduplicate passive_subs.txt and active_subs into subs.txt
+
+cat passive_subs.txt active_subs.txt | sort -u > subs.txt
+
+# Remove out-of-scope (I created a small python script for that)
+# The output valid domains are written to the file "subs_in_scope.txt"
+
+python3 remove_out_of_scope.py subs.txt out_of_scope.txt 
+
+# Probe with httpx (outputs urls.txt)
+
+httpx -silent -l subs_in_scope.txt -no-fallback -status-code > urls.txt
+\end{lstlisting}
+
+
+%% SECTION -- URL SCANNING
+\section{URL scanning (detailed analysis)}
+For this exercice I had to choose one url from the file \texttt{urls.txt} created on the previous section.
+To do so, I followed this steps: \\
+\begin{enumerate}
+\item Eliminate non-useful responses
+\begin{itemize}
+     \item \textbf{301 / 307 / 308 (redirects):} Usually just point to canonical domains (e.g. www.chime.com). 
+     \item \textbf{403 Forbidden:} Can be useful for fuzzing, but less ideal for initial analysis.
+     \item \textbf{400 Bad Request:} Often unhelpful (may indicate incomplete config or wrong host header).
+     \item \textbf{404 Not Found:} Possible for hidden content, but not good for first choice.
+\end{itemize}
+
+\item Focus on live (200 OK) responses \\
+These are most promising for service and tech fingerprinting:
+\begin{itemize}
+     \item https://flashpaper-dev3.chime.com [200]
+     \item https://docs-dev3.chime.com [200]
+     \item https://flashpaper.chime.com [200]
+     \item https://flashpaper-dev1.chime.com [200]
+     \item https://chime-com-dev1.chime.com [200]
+     \item https://flashpaper-qa.chime.com [200]
+     \item https://flashpaper-dev4.chime.com [200]
+     \item https://vpn.chime.com [200]
+     \item https://wp-dev2.chime.com [200]
+\end{itemize}
+
+\item Potencial analysis
+\begin{itemize}
+     \item \textbf{Internal/Dev/QA targets} are often misconfigured and leak more than production.
+     \item \textbf{Docs sites} sometimes expose APIs, Swagger, or internal endpoints.
+     \item \textbf{VPN portals} can leak version info, auth endpoints, or be vulnerable to auth bypass.
+     \item \textbf{Flashpaper} sounds like an internal tool/product, possibly admin dashboard. High chance of findings.
+     \item \textbf{WordPress dev} (wp-dev2). WordPress is notorious for vulnerabilities and may have leftover plugins.
+\end{itemize}
+
+\item Final choice \\ 
+I choose the url https://wp-dev2.chime.com. The reasons are:
+\begin{itemize}
+     \item Dev environment (likely weaker security).
+     \item Built with WordPress (high probability for vunerabilities).
+     \item Good chance of endpoints, debug info, or exposed APIs.
+\end{itemize}
+\end{enumerate}
+
+\subsection{Top 5 Identified Technologies}
+For this I used both the Wappalyzer browser extension and nuclei CLI tool. I started by using Wappalyzer, and, although it showed me a lot of technologies being 
+used on the website, it also didn't give me a lot of information about the version of each one. So I tried also using nuclei and run the command:  
+\begin{itemize}
+\item nuclei -u \"https://wp-dev2.chime.com\" -tags tech
+\end{itemize}
+The scan found multiple technologies, mostly WordPress plugins plus infrastructure. After analysing the results, I would say the top 5 findings are the following:
+
+\begin{enumerate}
+    \item \textbf{WordPress (CMS)}
+    \begin{itemize}
+        \item Detected by: \textbf{nuclei} \& \textbf{Wappalyzer}
+        \item Multiple plugins detected (Classic Editor, SEO, Super Cache, etc.), some with outdated versions.
+        \item Core CMS platform used to serve the website.
+    \end{itemize}
+
+    \item \textbf{PHP (Language)}
+    \begin{itemize}
+        \item Detected by: \textbf{Wappalyzer}
+        \item Backend language powering WordPress.
+        \item No version information available.
+    \end{itemize}
+
+    \item \textbf{MySQL (Database)}
+    \begin{itemize}
+        \item Detected by: \textbf{Wappalyzer}
+        \item Stores site content, user data, and configuration.
+        \item No version information available.
+    \end{itemize}
+
+    \item \textbf{Cloudflare (CDN/WAF)}
+    \begin{itemize}
+        \item Detected by: \textbf{nuclei} \& \textbf{Wappalyzer}
+        \item Provides caching, content delivery network, and web application firewall.
+        \item Masks the origin server IP.
+    \end{itemize}
+
+    \item \textbf{Matrix (Messaging Protocol)}
+    \begin{itemize}
+        \item Detected by: \textbf{nuclei}
+        \item Integration with external Matrix homeserver (\texttt{chime.ems.host}).
+        \item Used for decentralized real-time messaging and federation.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Content discovery}
+For this exercise I used ffuf and the wordlist common.txt from SecLists:
+
+Unfortnately, while trying to use ffuf, curl and httpx, it seems I was blocked by their cloudflare security. As such, I continued using a different subdomain
+that is also interesting, that being \texttt{https://flashpaper-dev3.chime.com}.
+
+\begin{lstlisting}
+
+# Get error size to filter on ffuf command
+curl -s -o /dev/null -w "%{http_code} %{size_download}\n" https://flashpaper-dev3.chime.com/nonexistent-abc123
+
+# Quick, low-noise probe (Need to replace <404SIZE> with the value got on the first command, in my case was 19)
+# Changed to only use 5 threads to not alert cloudflare
+ffuf -u https://flashpaper-dev3.chime.com/FUZZ \
+     -w ~/SecLists/Discovery/Web-Content/common.txt \
+     -e .php,.html,.htm,.txt,.js \
+     -t 5 \
+     -mc 200,301,302,403 \
+     -fs <404SIZE> \
+     -o ffuf-quick.json -of json
+\end{lstlisting}
+
+The scan wielded multiple results, mostly with http status code 403. From the results, there were only found 4 endpoints with status code 200, those being:
+\begin{itemize}
+     \item https://flashpaper-dev3.chime.com/add
+     \item https://flashpaper-dev3.chime.com/favicon.ico
+     \item https://flashpaper-dev3.chime.com/ping
+     \item https://flashpaper-dev3.chime.com/.well-known/http-opportunistic
+\end{itemize} 
+None of them being particularly useful\dots
+
+% \section{Google dorking and deeper research}
+% \subsection{Google dorks used}
+% List dork queries executed and results (do not include links to sensitive data from live searches in the report; summarise findings and include screenshots if allowed by policy).
+
+% \subsection{Research on potential sensitive endpoints}
+% If any endpoints look promising, document follow-up checks you ran (e.g., parameter fuzzing, attempted login bypass, CVE checks), and the outcomes.
+
+\end{document}
