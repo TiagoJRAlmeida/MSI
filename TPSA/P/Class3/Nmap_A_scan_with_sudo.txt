@@ -1,0 +1,321 @@
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-10-08 15:25 WEST
+Nmap scan report for tpas-be.tail9b2a2.ts.net (100.101.159.45)
+Host is up (0.015s latency).
+Not shown: 991 closed tcp ports (reset)
+PORT     STATE SERVICE          VERSION
+22/tcp   open  ssh              OpenSSH 8.9p1 Ubuntu 3ubuntu0.13 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   256 fb:ad:d2:7b:62:da:fd:cb:75:d9:73:86:35:63:22:08 (ECDSA)
+|_  256 55:4a:cc:f4:7e:3b:ca:cd:8b:99:7c:66:a8:12:82:8b (ED25519)
+80/tcp   open  http             nginx 1.29.1
+|_http-server-header: nginx/1.29.1
+|_http-title: Did not follow redirect to https://tpas-be.tail9b2a2.ts.net/
+443/tcp  open  ssl/http         nginx 1.29.1
+| tls-alpn: 
+|   http/1.1
+|   http/1.0
+|_  http/0.9
+| http-robots.txt: 1 disallowed entry 
+|_/admin
+|_http-server-header: nginx/1.29.1
+|_ssl-date: TLS randomness does not represent time
+|_http-title: TPAS 2025/2026
+| ssl-cert: Subject: commonName=tpas-desafios.alunos.dcc.fc.up.pt/organizationName=Universidade do Porto/countryName=PT
+| Subject Alternative Name: DNS:tpas-desafios.alunos.dcc.fc.up.pt
+| Not valid before: 2025-10-02T16:03:52
+|_Not valid after:  2026-10-02T16:03:52
+6002/tcp open  X11:2?
+| fingerprint-strings: 
+|   GenericLines: 
+|     HTTP/1.1 400 Bad Request
+|     Connection: close
+|     Content-Type: text/html
+|     Content-Length: 193
+|     <html>
+|     <head>
+|     <title>Bad Request</title>
+|     </head>
+|     <body>
+|     <h1><p>Bad Request</p></h1>
+|     Invalid Request Line &#x27;Invalid HTTP request line: &#x27;&#x27;&#x27;
+|     </body>
+|     </html>
+|   GetRequest: 
+|     HTTP/1.0 200 OK
+|     Server: gunicorn
+|     Date: Wed, 08 Oct 2025 14:43:34 GMT
+|     Connection: close
+|     Content-Type: text/html; charset=utf-8
+|     Content-Length: 1045
+|     <html>
+|     <head>
+|     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+|     </head>
+|     <body>
+|     <div class="content">
+|     <center>
+|     <br>
+|     <h1>My Files</h1>
+|     <hr>
+|     <p><a href="/view?file=quotes.txt">quotes</a></p>
+|     <p><a href="/view?file=todo.txt">TODO list</a></p>
+|     </center>
+|     </div>
+|     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+|     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB
+|   HTTPOptions: 
+|     HTTP/1.0 200 OK
+|     Server: gunicorn
+|     Date: Wed, 08 Oct 2025 14:43:34 GMT
+|     Connection: close
+|     Content-Type: text/html; charset=utf-8
+|     Allow: OPTIONS, GET, HEAD
+|     Content-Length: 0
+|   RTSPRequest: 
+|     HTTP/1.1 400 Bad Request
+|     Connection: close
+|     Content-Type: text/html
+|     Content-Length: 196
+|     <html>
+|     <head>
+|     <title>Bad Request</title>
+|     </head>
+|     <body>
+|     <h1><p>Bad Request</p></h1>
+|     Invalid HTTP Version &#x27;Invalid HTTP Version: &#x27;RTSP/1.0&#x27;&#x27;
+|     </body>
+|_    </html>
+6003/tcp open  http             Apache httpd 2.4.52 ((Debian))
+|_http-server-header: Apache/2.4.52 (Debian)
+|_http-title: Site doesn't have a title (text/html; charset=UTF-8).
+6004/tcp open  http             Apache httpd 2.4.54 ((Debian))
+|_http-server-header: Apache/2.4.54 (Debian)
+|_http-title: IP Service
+6005/tcp open  X11:5?
+| fingerprint-strings: 
+|   GenericLines: 
+|     HTTP/1.1 400 Bad Request
+|     Connection: close
+|     Content-Type: text/html
+|     Content-Length: 193
+|     <html>
+|     <head>
+|     <title>Bad Request</title>
+|     </head>
+|     <body>
+|     <h1><p>Bad Request</p></h1>
+|     Invalid Request Line &#x27;Invalid HTTP request line: &#x27;&#x27;&#x27;
+|     </body>
+|     </html>
+|   GetRequest: 
+|     HTTP/1.0 200 OK
+|     Server: gunicorn
+|     Date: Wed, 08 Oct 2025 14:43:34 GMT
+|     Connection: close
+|     Content-Type: text/html; charset=utf-8
+|     Content-Length: 8140
+|     <!DOCTYPE html>
+|     <html>
+|     <head>
+|     <title>NDA Service</title>
+|     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+|     <style>
+|     {white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;}
+|     body {
+|     background: #7ac05c;
+|     </style>
+|     </head>
+|     <body>
+|     <div class="container text-center">
+|     <div class="document" style="padding: 10%">
+|     <h1>Non-disclosure agreement</h1>
+|     <div class="card" style="margin-top: 50px">
+|     <div class="card-body">
+|   HTTPOptions: 
+|     HTTP/1.0 200 OK
+|     Server: gunicorn
+|     Date: Wed, 08 Oct 2025 14:43:34 GMT
+|     Connection: close
+|     Content-Type: text/html; charset=utf-8
+|     Allow: HEAD, OPTIONS, GET
+|_    Content-Length: 0
+7000/tcp open  afs3-fileserver?
+|_irc-info: Unable to open connection
+7001/tcp open  afs3-callback?
+| fingerprint-strings: 
+|   FourOhFourRequest: 
+|     HTTP/1.0 404 Not Found
+|     Date: Wed Oct 8 14:44:23 2025
+|     Content-Length: 145
+|     Connection: close
+|     X-Frame-Options: SAMEORIGIN
+|     <html>
+|     <head><title>Document Error: Not Found</title></head>
+|     <body>
+|     <h2>Access Error: Not Found</h2>
+|     </body>
+|     </html>
+|   GetRequest: 
+|     HTTP/1.0 302 Redirect
+|     Date: Wed Oct 8 14:43:33 2025
+|     Content-Length: 214
+|     Connection: close
+|     Location: http://localhost/index.html
+|     X-Frame-Options: SAMEORIGIN
+|     <html><head></head><body>
+|     This document has moved to a new <a href="http://localhost/index.html">location</a>.
+|     Please update your documents to reflect the new location.
+|     </body></html>
+|   HTTPOptions: 
+|     HTTP/1.0 406 Not Acceptable
+|     Date: Wed Oct 8 14:43:33 2025
+|     Content-Length: 20
+|     Connection: close
+|     X-Frame-Options: SAMEORIGIN
+|     Unsupported method
+|   RTSPRequest: 
+|     HTTP/1.0 406 Not Acceptable
+|     Date: Wed Oct 8 14:43:33 2025
+|     Content-Length: 155
+|     Connection: close
+|     X-Frame-Options: SAMEORIGIN
+|     <html>
+|     <head><title>Document Error: Not Acceptable</title></head>
+|     <body>
+|     <h2>Access Error: Not Acceptable</h2>
+|     </body>
+|     </html>
+|   SIPOptions: 
+|     HTTP/1.0 400 Bad Request
+|     Date: Wed Oct 8 14:44:38 2025
+|     Content-Length: 149
+|     Connection: close
+|     X-Frame-Options: SAMEORIGIN
+|     <html>
+|     <head><title>Document Error: Bad Request</title></head>
+|     <body>
+|     <h2>Access Error: Bad Request</h2>
+|     </body>
+|_    </html>
+3 services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port6002-TCP:V=7.94SVN%I=7%D=10/8%Time=68E6746B%P=x86_64-pc-linux-gnu%r
+SF:(GenericLines,11E,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x2
+SF:0close\r\nContent-Type:\x20text/html\r\nContent-Length:\x20193\r\n\r\n<
+SF:html>\n\x20\x20<head>\n\x20\x20\x20\x20<title>Bad\x20Request</title>\n\
+SF:x20\x20</head>\n\x20\x20<body>\n\x20\x20\x20\x20<h1><p>Bad\x20Request</
+SF:p></h1>\n\x20\x20\x20\x20Invalid\x20Request\x20Line\x20&#x27;Invalid\x2
+SF:0HTTP\x20request\x20line:\x20&#x27;&#x27;&#x27;\n\x20\x20</body>\n</htm
+SF:l>\n")%r(GetRequest,4B0,"HTTP/1\.0\x20200\x20OK\r\nServer:\x20gunicorn\
+SF:r\nDate:\x20Wed,\x2008\x20Oct\x202025\x2014:43:34\x20GMT\r\nConnection:
+SF:\x20close\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-Le
+SF:ngth:\x201045\r\n\r\n<html>\n<head>\n\t<link\x20rel=\"stylesheet\"\x20h
+SF:ref=\"https://maxcdn\.bootstrapcdn\.com/bootstrap/4\.0\.0-beta\.2/css/b
+SF:ootstrap\.min\.css\"\x20integrity=\"sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc5
+SF:1MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb\"\x20crossorigin=\"anonymous\">\n<
+SF:/head>\n<body>\n\t<div\x20class=\"content\">\n\t<center>\n\t<br>\n\t<h1
+SF:>My\x20Files</h1>\n\t\t<hr>\n\t\t<p><a\x20href=\"/view\?file=quotes\.tx
+SF:t\">quotes</a></p>\n\t\t<p><a\x20href=\"/view\?file=todo\.txt\">TODO\x2
+SF:0list</a></p>\n\t</center>\n\t</div>\n\t<script\x20src=\"https://code\.
+SF:jquery\.com/jquery-3\.2\.1\.slim\.min\.js\"\x20integrity=\"sha384-KJ3o2
+SF:DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\"\x20crosso
+SF:rigin=\"anonymous\"></script>\n<script\x20src=\"https://cdnjs\.cloudfla
+SF:re\.com/ajax/libs/popper\.js/1\.12\.3/umd/popper\.min\.js\"\x20integrit
+SF:y=\"sha384-vFJXuSJphROIrBnz7yo7oB")%r(HTTPOptions,B3,"HTTP/1\.0\x20200\
+SF:x20OK\r\nServer:\x20gunicorn\r\nDate:\x20Wed,\x2008\x20Oct\x202025\x201
+SF:4:43:34\x20GMT\r\nConnection:\x20close\r\nContent-Type:\x20text/html;\x
+SF:20charset=utf-8\r\nAllow:\x20OPTIONS,\x20GET,\x20HEAD\r\nContent-Length
+SF::\x200\r\n\r\n")%r(RTSPRequest,121,"HTTP/1\.1\x20400\x20Bad\x20Request\
+SF:r\nConnection:\x20close\r\nContent-Type:\x20text/html\r\nContent-Length
+SF::\x20196\r\n\r\n<html>\n\x20\x20<head>\n\x20\x20\x20\x20<title>Bad\x20R
+SF:equest</title>\n\x20\x20</head>\n\x20\x20<body>\n\x20\x20\x20\x20<h1><p
+SF:>Bad\x20Request</p></h1>\n\x20\x20\x20\x20Invalid\x20HTTP\x20Version\x2
+SF:0&#x27;Invalid\x20HTTP\x20Version:\x20&#x27;RTSP/1\.0&#x27;&#x27;\n\x20
+SF:\x20</body>\n</html>\n");
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port6005-TCP:V=7.94SVN%I=7%D=10/8%Time=68E6746B%P=x86_64-pc-linux-gnu%r
+SF:(GenericLines,11E,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x2
+SF:0close\r\nContent-Type:\x20text/html\r\nContent-Length:\x20193\r\n\r\n<
+SF:html>\n\x20\x20<head>\n\x20\x20\x20\x20<title>Bad\x20Request</title>\n\
+SF:x20\x20</head>\n\x20\x20<body>\n\x20\x20\x20\x20<h1><p>Bad\x20Request</
+SF:p></h1>\n\x20\x20\x20\x20Invalid\x20Request\x20Line\x20&#x27;Invalid\x2
+SF:0HTTP\x20request\x20line:\x20&#x27;&#x27;&#x27;\n\x20\x20</body>\n</htm
+SF:l>\n")%r(GetRequest,2067,"HTTP/1\.0\x20200\x20OK\r\nServer:\x20gunicorn
+SF:\r\nDate:\x20Wed,\x2008\x20Oct\x202025\x2014:43:34\x20GMT\r\nConnection
+SF::\x20close\r\nContent-Type:\x20text/html;\x20charset=utf-8\r\nContent-L
+SF:ength:\x208140\r\n\r\n<!DOCTYPE\x20html>\n<html>\n<head>\n\x20\x20\x20\
+SF:x20<title>NDA\x20Service</title>\n\x20\x20\x20\x20<link\x20rel=\"styles
+SF:heet\"\x20href=\"https://stackpath\.bootstrapcdn\.com/bootstrap/4\.3\.1
+SF:/css/bootstrap\.min\.css\"\x20integrity=\"sha384-ggOyR0iXCbMQv3Xipma34M
+SF:D\+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\"\x20crossorigin=\"anonymou
+SF:s\">\n\x20\x20\x20\x20<style>\n\x20\x20\x20\x20pre\x20{white-space:\x20
+SF:pre-wrap;\x20white-space:\x20-moz-pre-wrap;\x20white-space:\x20-pre-wra
+SF:p;\x20white-space:\x20-o-pre-wrap;\x20word-wrap:\x20break-word;}\n\n\x2
+SF:0\x20\x20\x20body\x20{\n\x20\x20\x20\x20\x20\x20\x20\x20background:\x20
+SF:#7ac05c;\n\x20\x20\x20\x20}\n\x20\x20\x20\x20</style>\n</head>\n<body>\
+SF:n\x20\x20\x20\x20<div\x20class=\"container\x20text-center\">\n\x20\x20\
+SF:x20\x20\x20\x20\x20\x20<div\x20class=\"document\"\x20style=\"padding:\x
+SF:2010%\">\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h1>Non-discl
+SF:osure\x20agreement</h1>\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x
+SF:20<div\x20class=\"card\"\x20style=\"margin-top:\x2050px\">\n\x20\x20\x2
+SF:0\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\"ca
+SF:rd-body\">\n\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20")%r(HT
+SF:TPOptions,B3,"HTTP/1\.0\x20200\x20OK\r\nServer:\x20gunicorn\r\nDate:\x2
+SF:0Wed,\x2008\x20Oct\x202025\x2014:43:34\x20GMT\r\nConnection:\x20close\r
+SF:\nContent-Type:\x20text/html;\x20charset=utf-8\r\nAllow:\x20HEAD,\x20OP
+SF:TIONS,\x20GET\r\nContent-Length:\x200\r\n\r\n");
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port7001-TCP:V=7.94SVN%I=7%D=10/8%Time=68E6746A%P=x86_64-pc-linux-gnu%r
+SF:(GetRequest,17B,"HTTP/1\.0\x20302\x20Redirect\r\nDate:\x20Wed\x20Oct\x2
+SF:0\x208\x2014:43:33\x202025\r\nContent-Length:\x20214\r\nConnection:\x20
+SF:close\r\nLocation:\x20http://localhost/index\.html\r\nX-Frame-Options:\
+SF:x20SAMEORIGIN\r\n\r\n<html><head></head><body>\r\n\x20\x20\x20\x20\x20\
+SF:x20\x20\x20This\x20document\x20has\x20moved\x20to\x20a\x20new\x20<a\x20
+SF:href=\"http://localhost/index\.html\">location</a>\.\r\n\x20\x20\x20\x2
+SF:0\x20\x20\x20\x20Please\x20update\x20your\x20documents\x20to\x20reflect
+SF:\x20the\x20new\x20location\.\r\n\x20\x20\x20\x20\x20\x20\x20\x20</body>
+SF:</html>\r\n\r\n")%r(HTTPOptions,97,"HTTP/1\.0\x20406\x20Not\x20Acceptab
+SF:le\r\nDate:\x20Wed\x20Oct\x20\x208\x2014:43:33\x202025\r\nContent-Lengt
+SF:h:\x2020\r\nConnection:\x20close\r\nX-Frame-Options:\x20SAMEORIGIN\r\n\
+SF:r\nUnsupported\x20method\r\n")%r(RTSPRequest,11F,"HTTP/1\.0\x20406\x20N
+SF:ot\x20Acceptable\r\nDate:\x20Wed\x20Oct\x20\x208\x2014:43:33\x202025\r\
+SF:nContent-Length:\x20155\r\nConnection:\x20close\r\nX-Frame-Options:\x20
+SF:SAMEORIGIN\r\n\r\n<html>\r\n\x20\x20\x20\x20<head><title>Document\x20Er
+SF:ror:\x20Not\x20Acceptable</title></head>\r\n\x20\x20\x20\x20<body>\r\n\
+SF:x20\x20\x20\x20\x20\x20\x20\x20<h2>Access\x20Error:\x20Not\x20Acceptabl
+SF:e</h2>\r\n\x20\x20\x20\x20</body>\r\n</html>\r\n\r\n")%r(FourOhFourRequ
+SF:est,110,"HTTP/1\.0\x20404\x20Not\x20Found\r\nDate:\x20Wed\x20Oct\x20\x2
+SF:08\x2014:44:23\x202025\r\nContent-Length:\x20145\r\nConnection:\x20clos
+SF:e\r\nX-Frame-Options:\x20SAMEORIGIN\r\n\r\n<html>\r\n\x20\x20\x20\x20<h
+SF:ead><title>Document\x20Error:\x20Not\x20Found</title></head>\r\n\x20\x2
+SF:0\x20\x20<body>\r\n\x20\x20\x20\x20\x20\x20\x20\x20<h2>Access\x20Error:
+SF:\x20Not\x20Found</h2>\r\n\x20\x20\x20\x20</body>\r\n</html>\r\n\r\n")%r
+SF:(SIPOptions,116,"HTTP/1\.0\x20400\x20Bad\x20Request\r\nDate:\x20Wed\x20
+SF:Oct\x20\x208\x2014:44:38\x202025\r\nContent-Length:\x20149\r\nConnectio
+SF:n:\x20close\r\nX-Frame-Options:\x20SAMEORIGIN\r\n\r\n<html>\r\n\x20\x20
+SF:\x20\x20<head><title>Document\x20Error:\x20Bad\x20Request</title></head
+SF:>\r\n\x20\x20\x20\x20<body>\r\n\x20\x20\x20\x20\x20\x20\x20\x20<h2>Acce
+SF:ss\x20Error:\x20Bad\x20Request</h2>\r\n\x20\x20\x20\x20</body>\r\n</htm
+SF:l>\r\n\r\n");
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.94SVN%E=4%D=10/8%OT=22%CT=1%CU=31507%PV=N%DS=1%DC=I%G=Y%TM=68E6
+OS:753E%P=x86_64-pc-linux-gnu)SEQ(SP=102%GCD=1%ISR=104%TI=Z%CI=Z%TS=A)SEQ(S
+OS:P=103%GCD=1%ISR=104%TI=Z%CI=Z%TS=A)OPS(O1=M4D8ST11NW7%O2=M4D8ST11NW7%O3=
+OS:M4D8NNT11NW7%O4=M4D8ST11NW7%O5=M4D8ST11NW7%O6=M4D8ST11)WIN(W1=FE3C%W2=FE
+OS:3C%W3=FE3C%W4=FE3C%W5=FE3C%W6=FE3C)ECN(R=Y%DF=Y%T=40%W=FBE0%O=M4D8NNSNW7
+OS:%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=
+OS:Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%
+OS:RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0
+OS:%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T=40%IPL=164%UN=0%RIPL=G%RID=G%RIP
+OS:CK=G%RUCK=355%RUD=G)IE(R=N)
+
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE
+HOP RTT      ADDRESS
+1   14.89 ms tpas-be.tail9b2a2.ts.net (100.101.159.45)
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 223.10 seconds
