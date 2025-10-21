@@ -1,0 +1,13 @@
+notifications.chime.com
+tags.chime.com
+lending.chime.com
+mcd.chime.com
+wireless.chime.com
+atomic.chime.com
+kyc.chime.com
+nautilus.chime.com
+dds.chime.com
+cde.chime.com
+payday.chime.com
+persona.chime.com
+beacon.chime.com
