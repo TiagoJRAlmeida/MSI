@@ -1,0 +1,13 @@
+\begin{thebibliography}{1}
+
+\bibitem{Tor-First-generation1996}
+Paul~Syverson David M.~Goldschlag, Michael G.~Reed.
+\newblock Hiding routing information.
+\newblock {\em Information Hiding Workshop}, 1996.
+
+\bibitem{Tor-Second-Generation2004}
+Paul~Syverson Roger~Dingledine, Nick~Mathewson.
+\newblock Tor: The second-generation onion router.
+\newblock {\em USENIX Security Symposium}, 2004.
+
+\end{thebibliography}
